@@ -21,6 +21,22 @@ const getPagamentos = () => {
   });
 };
 
+const getPagamentosPorData = (params) => {
+  console.log("Pagamentos");
+  const { data } = params;
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT * FROM public.pagamento WHERE "dataPagamento" = '${data}'`,
+      (error, results) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
+
 const createPagamento = (body) => {
   return new Promise(function (resolve, reject) {
     const {
@@ -82,6 +98,7 @@ const updatePagamento = (body) => {
 
 module.exports = {
   getPagamentos,
+  getPagamentosPorData,
   createPagamento,
   updatePagamento,
   deletePagamento,
