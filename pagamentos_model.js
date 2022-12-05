@@ -10,7 +10,7 @@ const getPagamentos = () => {
   console.log("Pagamentos");
   return new Promise(function (resolve, reject) {
     pool.query(
-      'SELECT * FROM public.pagamento ORDER BY "numeroPagamento" ASC',
+      'SELECT * FROM public.pagamento ORDER BY "numeroPagamento" DESC',
       (error, results) => {
         if (error) {
           reject(error);

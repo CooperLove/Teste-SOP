@@ -10,7 +10,7 @@ const getEmpenhos = () => {
   console.log("Empenhos");
   return new Promise(function (resolve, reject) {
     pool.query(
-      'SELECT * FROM public.empenho ORDER BY "numeroEmpenho" ASC',
+      'SELECT * FROM public.empenho ORDER BY "numeroEmpenho" DESC',
       (error, results) => {
         if (error) {
           reject(error);
@@ -54,7 +54,7 @@ const createEmpenho = (body) => {
         if (error) {
           reject(error);
         }
-        // resolve(`A new empenho has been added added: ${results.rows[0]}`);
+        resolve(`Empenho criado com sucesso! ${results.rows[0]}`);
       }
     );
   });

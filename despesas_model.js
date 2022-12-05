@@ -9,7 +9,7 @@ const pool = new Pool({
 const getDespesas = () => {
   return new Promise(function (resolve, reject) {
     pool.query(
-      'SELECT * FROM public.despesa ORDER BY "numeroProtocolo" ASC',
+      'SELECT * FROM public.despesa ORDER BY "numeroProtocolo" DESC',
       (error, results) => {
         if (error) {
           reject(error);
