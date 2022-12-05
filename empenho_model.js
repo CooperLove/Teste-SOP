@@ -21,6 +21,22 @@ const getEmpenhos = () => {
   });
 };
 
+const getEmpenhosPorData = (params) => {
+  console.log("Empenhos por data");
+  const { data } = params;
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT * FROM public.empenho WHERE "dataEmpenho" = '${data}'`,
+      (error, results) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
+
 const createEmpenho = (body) => {
   return new Promise(function (resolve, reject) {
     const {
@@ -81,6 +97,7 @@ const updateEmpenho = (body) => {
 
 module.exports = {
   getEmpenhos,
+  getEmpenhosPorData,
   createEmpenho,
   updateEmpenho,
   deleteEmpenho,

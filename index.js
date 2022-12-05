@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const port = 3001;
 
-const despesas_model = require("./react-postgres/src/despesas_model");
-const empenhos_model = require("./react-postgres/src/empenho_model");
-const pagamentos_model = require("./react-postgres/src/pagamentos_model");
+const despesas_model = require("./despesas_model");
+const empenhos_model = require("./empenho_model");
+const pagamentos_model = require("./pagamentos_model");
 
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -124,6 +124,17 @@ app.get("/empenhos", (req, res) => {
     });
 });
 
+app.get("/empenhos/data/:data", (req, res) => {
+  empenhos_model
+    .getEmpenhosPorData(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
 app.post("/novoEmpenho", (req, res) => {
   console.log(req.body);
   empenhos_model
@@ -155,6 +166,17 @@ app.put("/empenhos/update/:id", (req, res) => {
 app.get("/pagamentos", (req, res) => {
   pagamentos_model
     .getPagamentos()
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+app.get("/pagamentos/data/:data", (req, res) => {
+  pagamentos_model
+    .getPagamentosPorData(req.params)
     .then((response) => {
       res.status(200).send(response);
     })
