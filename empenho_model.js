@@ -52,9 +52,12 @@ const createEmpenho = (body) => {
       [anoEmpenho, dataEmpenho, valorEmpenho, observacao, numeroProtocolo],
       (error, results) => {
         if (error) {
-          reject(error);
+          // reject(error);
+          console.log("Já existe um registro de empenho para essa despesa!");
+          resolve("Já existe um registro de empenho para essa despesa!");
+          return;
         }
-        resolve(`Empenho criado com sucesso! ${results.rows[0]}`);
+        resolve(`Empenho criado com sucesso!`);
       }
     );
   });

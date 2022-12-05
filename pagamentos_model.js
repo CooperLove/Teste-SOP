@@ -53,9 +53,12 @@ const createPagamento = (body) => {
       [anoPagamento, dataPagamento, valorPagamento, observacao, numeroEmpenho],
       (error, results) => {
         if (error) {
-          reject(error);
+          console.log("Erro ao criar pagamento: " + error);
+          resolve("Erro ao criar pagamento: " + error);
+          return;
         }
-        resolve(`A new pagamento has been added added: ${results.rows[0]}`);
+        console.log("Pagamento criado com sucesso!");
+        resolve(`Pagamento criado com sucesso!`);
       }
     );
   });
