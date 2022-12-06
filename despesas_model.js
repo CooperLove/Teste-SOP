@@ -111,17 +111,28 @@ const createDespesa = (body) => {
   });
 };
 
-const deleteDespesa = (idMerchant) => {
+const deleteDespesa = (params) => {
+  const { numeroProtocolo } = params;
   return new Promise(function (resolve, reject) {
-    const id = idMerchant;
     pool.query(
-      "DELETE FROM merchants WHERE id = $1",
-      [id],
+      `DELETE FROM public.despesa WHERE "numeroProtocolo" = ${numeroProtocolo}`,
+      [],
       (error, results) => {
         if (error) {
-          reject(error);
+          console.log(
+            `Não foi possível excluir a despesa de número ${numeroProtocolo}, pois há empenhos associados a ela.`,
+            error
+          );
+          resolve(
+            `Não foi possível excluir a despesa de número ${numeroProtocolo}, pois há empenhos associados a ela.`,
+            error
+          );
+          return;
         }
-        resolve(`Merchant deleted with ID: ${id}`);
+        console.log(
+          `Despesa de número ${numeroProtocolo} excluída com sucesso!`
+        );
+        resolve(`Despesa de número ${numeroProtocolo} excluída com sucesso!`);
       }
     );
   });

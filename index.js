@@ -113,6 +113,20 @@ app.put("/despesas/update/:id", (req, res) => {
     });
 });
 
+app.delete("/despesas/:numeroProtocolo", (req, res) => {
+  console.log(req.params);
+  despesas_model
+    .deleteDespesa(req.params)
+    .then((response) => {
+      console.log("Excluir despesa: " + req.params);
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      console.log("Erro ao excluir despesa: " + error);
+      res.status(500).send(error);
+    });
+});
+
 app.get("/empenhos", (req, res) => {
   empenhos_model
     .getEmpenhos()
