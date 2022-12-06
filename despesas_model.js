@@ -20,6 +20,45 @@ const getDespesas = () => {
   });
 };
 
+const getValorEmpenhosDaDespesa = (params) => {
+  const { numeroProtocolo } = params;
+  console.log("Soma empenhos " + numeroProtocolo);
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT SUM ("valorEmpenho") FROM public.empenho WHERE "numeroProtocolo" = ${numeroProtocolo};`,
+      (error, results) => {
+        if (error) {
+          console.log("Não há registros de empenhos para essa despesa.");
+          resolve("Não há registros de empenhos para essa despesa.");
+          return;
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
+
+const getValorPagamentosDaDespesa = (params) => {
+  const { numeroProtocolo } = params;
+  console.log("Soma pagamentos " + numeroProtocolo);
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT SUM("valorPagamento") FROM public.pagamento,
+      (SELECT "numeroEmpenho" as num 
+      FROM public.empenho WHERE "numeroProtocolo" = ${numeroProtocolo}) as n
+      WHERE "numeroEmpenho" = "num";`,
+      (error, results) => {
+        if (error) {
+          console.log("Não há registros de pagamentos para essa despesa.");
+          resolve("Não há registros de pagamentos para essa despesa.");
+          return;
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
+
 const getDespesasDataProtocolo = () => {
   return new Promise(function (resolve, reject) {
     pool.query(
@@ -162,6 +201,8 @@ module.exports = {
   getDespesasTipoDespesa,
   getDespesasDataProtocolo,
   getDespesasCredor,
+  getValorEmpenhosDaDespesa,
+  getValorPagamentosDaDespesa,
   createDespesa,
   updateDespesa,
   deleteDespesa,

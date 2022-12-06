@@ -27,6 +27,29 @@ app.get("/despesas", (req, res) => {
       res.status(500).send(error);
     });
 });
+
+app.get("/despesas/valorEmpenhos/:numeroProtocolo", (req, res) => {
+  despesas_model
+    .getValorEmpenhosDaDespesa(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+app.get("/despesas/valorPagamentos/:numeroProtocolo", (req, res) => {
+  despesas_model
+    .getValorPagamentosDaDespesa(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
 app.get("/tipoDespesas", (req, res) => {
   despesas_model
     .getDespesasTipoDespesa()
