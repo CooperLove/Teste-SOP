@@ -120,31 +120,11 @@ const deleteEmpenho = (params) => {
   });
 };
 
-const updateEmpenho = (body) => {
-  return new Promise(function (resolve, reject) {
-    const { numeroProtocolo, descricaoEmpenho, status } = body;
-    pool.query(
-      "UPDATE PUBLIC.EMPENHO " +
-        'SET "descricaoEmpenho" = $2,' +
-        '"status" = $3' +
-        ' WHERE "numeroProtocolo" = $1',
-      [numeroProtocolo, descricaoEmpenho, status],
-      (error, results) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(`Empenho deleted with ID: ${numeroProtocolo}`);
-      }
-    );
-  });
-};
-
 module.exports = {
   getEmpenhos,
   getEmpenhosPorData,
   getValorPagamentosDaDespesa,
   getCredorDaDespesa,
   createEmpenho,
-  updateEmpenho,
   deleteEmpenho,
 };

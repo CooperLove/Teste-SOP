@@ -22,14 +22,14 @@ const getPagamentos = () => {
 };
 
 const getPagamentosPorData = (params) => {
-  console.log("Pagamentos");
   const { data } = params;
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT * FROM public.pagamento WHERE "dataPagamento" = '${data}'`,
       (error, results) => {
         if (error) {
-          reject(error);
+          resolve(`Erro ao recuperar pagamento com data ${data}`);
+          return;
         }
         resolve(results.rows);
       }
@@ -83,22 +83,6 @@ const createPagamento = (body) => {
   });
 };
 
-const deletePagamento = (idPagamento) => {
-  return new Promise(function (resolve, reject) {
-    const id = idPagamento;
-    pool.query(
-      "DELETE FROM merchants WHERE id = $1",
-      [id],
-      (error, results) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(`Pagamento deleted with ID: ${id}`);
-      }
-    );
-  });
-};
-
 const updatePagamento = (body) => {
   return new Promise(function (resolve, reject) {
     const { numeroProtocolo, descricaoPagamento, status } = body;
@@ -124,5 +108,4 @@ module.exports = {
   getCredorDoPagamento,
   createPagamento,
   updatePagamento,
-  deletePagamento,
 };

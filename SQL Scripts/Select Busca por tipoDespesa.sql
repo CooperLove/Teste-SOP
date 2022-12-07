@@ -1,0 +1,1 @@
+SELECT * FROM public.despesa WHERE "tipoDespesa" LIKE '%textoTipo%';

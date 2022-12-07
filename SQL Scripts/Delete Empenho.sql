@@ -1,0 +1,1 @@
+DELETE FROM public.empenho WHERE "numeroEmpenho" = ?;

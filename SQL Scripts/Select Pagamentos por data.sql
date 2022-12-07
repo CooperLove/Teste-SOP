@@ -1,0 +1,1 @@
+SELECT * FROM public.pagamento WHERE "dataPagamento" = ?;

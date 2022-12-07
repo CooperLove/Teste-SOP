@@ -1,0 +1,1 @@
+SELECT * FROM public.despesa ORDER BY "dataProtocolo" ASC

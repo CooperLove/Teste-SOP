@@ -1,0 +1,1 @@
+DELETE FROM public.despesa WHERE "numeroProtocolo" = ${numeroProtocolo}

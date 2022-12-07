@@ -186,25 +186,6 @@ const deleteDespesa = (params) => {
   });
 };
 
-const updateDespesa = (body) => {
-  return new Promise(function (resolve, reject) {
-    const { numeroProtocolo, descricaoDespesa, status } = body;
-    pool.query(
-      "UPDATE PUBLIC.DESPESA " +
-        'SET "descricaoDespesa" = $2,' +
-        '"status" = $3' +
-        ' WHERE "numeroProtocolo" = $1',
-      [numeroProtocolo, descricaoDespesa, status],
-      (error, results) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(`Merchant deleted with ID: ${numeroProtocolo}`);
-      }
-    );
-  });
-};
-
 module.exports = {
   getDespesas,
   getDespesasTipoDespesa,
@@ -213,6 +194,5 @@ module.exports = {
   getValorEmpenhosDaDespesa,
   getValorPagamentosDaDespesa,
   createDespesa,
-  updateDespesa,
   deleteDespesa,
 };
