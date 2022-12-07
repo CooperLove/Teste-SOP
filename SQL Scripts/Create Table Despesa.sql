@@ -18,4 +18,4 @@ CREATE TABLE IF NOT EXISTS public.despesa
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.despesa
-    OWNER to godlove;
+    OWNER to my_user;

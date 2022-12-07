@@ -22,4 +22,4 @@ CREATE TABLE IF NOT EXISTS public.empenho
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.empenho
-    OWNER to godlove;
+    OWNER to my_user;
