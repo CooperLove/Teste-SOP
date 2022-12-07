@@ -20,6 +20,24 @@ const getEmpenhos = () => {
     );
   });
 };
+const getCredorDaDespesa = (params) => {
+  const { numeroProtocolo } = params;
+  console.log("Get credor ", numeroProtocolo);
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT "credor" FROM public.empenho, 
+      (SELECT "credorDespesa" as credor, "numeroProtocolo" as num FROM public.despesa) as n
+      WHERE "num" = ${numeroProtocolo}`,
+      [],
+      (error, results) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
 
 const getEmpenhosPorData = (params) => {
   console.log("Empenhos por data");
@@ -66,6 +84,7 @@ const createEmpenho = (body) => {
       observacao,
       numeroProtocolo,
     } = body;
+    console.log("Body emp ", body);
     pool.query(
       'INSERT INTO public.empenho("anoEmpenho", "dataEmpenho", "valorEmpenho", "observacao", "numeroProtocolo")' +
         " VALUES ($1, $2, $3, $4, $5) RETURNING *",
@@ -126,6 +145,7 @@ module.exports = {
   getEmpenhos,
   getEmpenhosPorData,
   getValorPagamentosDaDespesa,
+  getCredorDaDespesa,
   createEmpenho,
   updateEmpenho,
   deleteEmpenho,

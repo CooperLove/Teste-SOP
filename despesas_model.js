@@ -22,7 +22,6 @@ const getDespesas = () => {
 
 const getValorEmpenhosDaDespesa = (params) => {
   const { numeroProtocolo } = params;
-  console.log("Soma empenhos " + numeroProtocolo);
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT SUM ("valorEmpenho") FROM public.empenho WHERE "numeroProtocolo" = ${numeroProtocolo};`,
@@ -40,7 +39,6 @@ const getValorEmpenhosDaDespesa = (params) => {
 
 const getValorPagamentosDaDespesa = (params) => {
   const { numeroProtocolo } = params;
-  console.log("Soma pagamentos " + numeroProtocolo);
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT SUM("valorPagamento") FROM public.pagamento,
@@ -111,20 +109,23 @@ const getDespesasCredor = (params) => {
     console.log(query);
 
     pool.query(
-      dataProtocolo !== "" && credor !== undefined && credor !== ""
-        ? `SELECT * FROM public.despesa 
-        WHERE \"credorDespesa\" LIKE '%${credor}%' 
-        OR \"tipoDespesa\" LIKE '%${credor}%'`
+      dataProtocolo !== undefined && credor !== undefined && credor !== ""
+        ? `SELECT * FROM (SELECT * FROM public.despesa 
+        WHERE "credorDespesa" LIKE '%${credor}%' 
+        OR "tipoDespesa" LIKE '%${credor}%') AS n 
+        WHERE "dataProtocolo" = '${dataProtocolo}' 
+        ORDER BY "numeroProtocolo"`
         : credor !== undefined && credor !== ""
         ? `SELECT * FROM public.despesa 
-      WHERE \"credorDespesa\" LIKE '%${credor}%' 
-      OR \"tipoDespesa\" LIKE '%${credor}%'`
+      WHERE "credorDespesa" LIKE '%${credor}%' 
+      OR "tipoDespesa" LIKE '%${credor}%'`
         : `SELECT * FROM public.despesa 
-      WHERE \"dataProtocolo\" = '${dataProtocolo}'`,
+      WHERE "dataProtocolo" = '${dataProtocolo}'`,
       [],
       (error, results) => {
         if (error) {
-          reject(error);
+          resolve(`Erro ao pesquisar ${credor} ${dataProtocolo} ${error}`);
+          return;
         }
         resolve(results.rows);
       }
@@ -135,10 +136,18 @@ const getDespesasCredor = (params) => {
 const createDespesa = (body) => {
   return new Promise(function (resolve, reject) {
     const { tipoDespesa, credorDespesa, descricaoDespesa, valorDespesa } = body;
+    const date = new Date();
+    const currentDay =
+      date.getFullYear() +
+      "-" +
+      Number(date.getMonth() + 1) +
+      "-" +
+      (date.getDate() < 10 ? "0" + date.getDate() : date.getDate());
+    const vencimento = Number(date.getFullYear() + 10) + "-12-31";
     pool.query(
-      "INSERT INTO despesa" +
-        '("tipoDespesa", "dataProtocolo", "dataVencimento", "credorDespesa", "descricaoDespesa", "valorDespesa", "status")' +
-        "VALUES ($1, '2022-12-02', '2022-12-31', $2, $3, $4, 'Aguardando empenho') RETURNING *",
+      `INSERT INTO despesa
+        ("tipoDespesa", "dataProtocolo", "dataVencimento", "credorDespesa", "descricaoDespesa", "valorDespesa", "status")
+        VALUES ($1, '${currentDay}', '${vencimento}', $2, $3, $4, 'Aguardando empenho') RETURNING *`,
       [tipoDespesa, credorDespesa, descricaoDespesa, valorDespesa],
       (error, results) => {
         if (error) {

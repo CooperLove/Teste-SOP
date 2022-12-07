@@ -170,6 +170,27 @@ app.get("/empenhos", (req, res) => {
       res.status(500).send(error);
     });
 });
+app.get("/empenhos/credores/:numeroProtocolo", (req, res) => {
+  empenhos_model
+    .getCredorDaDespesa(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+app.get("/pagamentos/credores/:numeroEmpenho", (req, res) => {
+  pagamentos_model
+    .getCredorDoPagamento(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
 
 app.delete("/empenhos/:numeroEmpenho", (req, res) => {
   empenhos_model

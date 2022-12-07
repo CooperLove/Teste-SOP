@@ -36,6 +36,26 @@ const getPagamentosPorData = (params) => {
     );
   });
 };
+const getCredorDoPagamento = (params) => {
+  const { numeroEmpenho } = params;
+  console.log("Credor do pagamento ".numeroEmpenho);
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT "credor" FROM public.pagamento,
+      (SELECT "numeroEmpenho" as numemp, "credor" FROM public.empenho, 
+      (SELECT "credorDespesa" as credor, "numeroProtocolo" as num FROM public.despesa) as n
+      WHERE "num" = "numeroProtocolo") as q
+      WHERE "numemp" = ${numeroEmpenho}`,
+      (error, results) => {
+        if (error) {
+          resolve(`Erro ao buscar credor ${error}`);
+          return;
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
 
 const createPagamento = (body) => {
   return new Promise(function (resolve, reject) {
@@ -102,6 +122,7 @@ const updatePagamento = (body) => {
 module.exports = {
   getPagamentos,
   getPagamentosPorData,
+  getCredorDoPagamento,
   createPagamento,
   updatePagamento,
   deletePagamento,
