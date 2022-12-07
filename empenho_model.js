@@ -36,6 +36,26 @@ const getEmpenhosPorData = (params) => {
     );
   });
 };
+const getValorPagamentosDaDespesa = (params) => {
+  const { numeroEmpenho } = params;
+  console.log("EMP - Valor pagamentos empenho ", numeroEmpenho);
+  return new Promise(function (resolve, reject) {
+    pool.query(
+      `SELECT SUM("valorPagamento") FROM 
+        public.pagamento,
+        (SELECT "numeroEmpenho" as num FROM public.empenho 
+        WHERE "numeroEmpenho" = ${numeroEmpenho}) as n
+        WHERE "numeroEmpenho" = "num";`,
+      (error, results) => {
+        if (error) {
+          resolve("Erro ", error);
+          return;
+        }
+        resolve(results.rows);
+      }
+    );
+  });
+};
 
 const createEmpenho = (body) => {
   return new Promise(function (resolve, reject) {
@@ -63,17 +83,21 @@ const createEmpenho = (body) => {
   });
 };
 
-const deleteEmpenho = (idEmpenho) => {
+const deleteEmpenho = (params) => {
+  const { numeroEmpenho } = params;
+  console.log("Excluindo empenho ", numeroEmpenho);
   return new Promise(function (resolve, reject) {
-    const id = idEmpenho;
     pool.query(
-      "DELETE FROM merchants WHERE id = $1",
-      [id],
+      `DELETE FROM public.empenho WHERE "numeroEmpenho" = ${numeroEmpenho}`,
+      [],
       (error, results) => {
         if (error) {
-          reject(error);
+          resolve(
+            `Não foi possível excluir o empenho ${numeroEmpenho}, pois há registros de pagamentos associados a ele.`
+          );
+          return;
         }
-        resolve(`Empenho deleted with ID: ${id}`);
+        resolve(`Empenho ${numeroEmpenho} excluido com sucesso.`);
       }
     );
   });
@@ -101,6 +125,7 @@ const updateEmpenho = (body) => {
 module.exports = {
   getEmpenhos,
   getEmpenhosPorData,
+  getValorPagamentosDaDespesa,
   createEmpenho,
   updateEmpenho,
   deleteEmpenho,

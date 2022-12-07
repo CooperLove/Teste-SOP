@@ -49,6 +49,16 @@ app.get("/despesas/valorPagamentos/:numeroProtocolo", (req, res) => {
       res.status(500).send(error);
     });
 });
+app.get("/empenhos/valorPagamentos/:numeroEmpenho", (req, res) => {
+  empenhos_model
+    .getValorPagamentosDaDespesa(req.params)
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
 
 app.get("/tipoDespesas", (req, res) => {
   despesas_model
@@ -153,6 +163,17 @@ app.delete("/despesas/:numeroProtocolo", (req, res) => {
 app.get("/empenhos", (req, res) => {
   empenhos_model
     .getEmpenhos()
+    .then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+app.delete("/empenhos/:numeroEmpenho", (req, res) => {
+  empenhos_model
+    .deleteEmpenho(req.params)
     .then((response) => {
       res.status(200).send(response);
     })
