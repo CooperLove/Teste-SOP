@@ -84,12 +84,9 @@ app.get("/credorDespesas/:credor", (req, res) => {
   despesas_model
     .getDespesasCredor(req.params)
     .then((response) => {
-      console.log(response);
-      console.log("Body " + JSON.stringify(req.params));
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro " + error);
       res.status(500).send(error);
     });
 });
@@ -97,12 +94,9 @@ app.get("/credorDespesas/data/:dataProtocolo", (req, res) => {
   despesas_model
     .getDespesasCredor(req.params)
     .then((response) => {
-      console.log(response);
-      console.log("Body data" + JSON.stringify(req.params));
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro " + error);
       res.status(500).send(error);
     });
 });
@@ -110,52 +104,40 @@ app.get("/credorDespesas/:credor/:dataProtocolo", (req, res) => {
   despesas_model
     .getDespesasCredor(req.params)
     .then((response) => {
-      console.log(response);
-      console.log("Body " + JSON.stringify(req.params));
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro " + error);
       res.status(500).send(error);
     });
 });
 app.post("/novaDespesa", (req, res) => {
-  console.log(req.body);
   despesas_model
     .createDespesa(req.body)
     .then((response) => {
-      console.log("Criando despesa: " + req.body);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro Criando despesa: " + error);
       res.status(500).send(error);
     });
 });
 app.put("/despesas/update/:id", (req, res) => {
-  console.log(req.body);
   despesas_model
     .updateDespesa(req.body)
     .then((response) => {
-      console.log("Update despesa: " + req.body);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro update despesa: " + error);
       res.status(500).send(error);
     });
 });
 
 app.delete("/despesas/:numeroProtocolo", (req, res) => {
-  console.log(req.params);
   despesas_model
     .deleteDespesa(req.params)
     .then((response) => {
-      console.log("Excluir despesa: " + req.params);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro ao excluir despesa: " + error);
       res.status(500).send(error);
     });
 });
@@ -215,29 +197,23 @@ app.get("/empenhos/data/:data", (req, res) => {
 });
 
 app.post("/novoEmpenho", (req, res) => {
-  console.log(req.body);
   empenhos_model
     .createEmpenho(req.body)
     .then((response) => {
-      console.log("Criando empenho: " + req.body);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro Criando empenho: " + error);
       res.status(500).send(error);
     });
 });
 
 app.put("/empenhos/update/:id", (req, res) => {
-  console.log(req.body);
   empenhos_model
     .updateEmpenho(req.body)
     .then((response) => {
-      console.log("Update empenho: " + req.body);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro update empenho: " + error);
       res.status(500).send(error);
     });
 });
@@ -265,15 +241,12 @@ app.get("/pagamentos/data/:data", (req, res) => {
 });
 
 app.post("/novoPagamento", (req, res) => {
-  console.log(req.body);
   pagamentos_model
     .createPagamento(req.body)
     .then((response) => {
-      console.log("Criando pagamento: " + req.body);
       res.status(200).send(response);
     })
     .catch((error) => {
-      console.log("Erro Criando pagamento: " + error);
       res.status(500).send(error);
     });
 });

@@ -38,7 +38,6 @@ const getPagamentosPorData = (params) => {
 };
 const getCredorDoPagamento = (params) => {
   const { numeroEmpenho } = params;
-  console.log("Credor do pagamento ".numeroEmpenho);
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT "credor" FROM public.pagamento,

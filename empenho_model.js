@@ -22,7 +22,6 @@ const getEmpenhos = () => {
 };
 const getCredorDaDespesa = (params) => {
   const { numeroProtocolo } = params;
-  console.log("Get credor ", numeroProtocolo);
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT "credor" FROM public.empenho, 
@@ -31,7 +30,8 @@ const getCredorDaDespesa = (params) => {
       [],
       (error, results) => {
         if (error) {
-          reject(error);
+          resolve(`Erro ao recuperar nome do credor do empenho ${error}`);
+          return;
         }
         resolve(results.rows);
       }
@@ -40,14 +40,13 @@ const getCredorDaDespesa = (params) => {
 };
 
 const getEmpenhosPorData = (params) => {
-  console.log("Empenhos por data");
   const { data } = params;
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT * FROM public.empenho WHERE "dataEmpenho" = '${data}'`,
       (error, results) => {
         if (error) {
-          reject(error);
+          resolve(`Erro ao recuperar empenho com data ${data} ${error}`);
         }
         resolve(results.rows);
       }
@@ -56,7 +55,7 @@ const getEmpenhosPorData = (params) => {
 };
 const getValorPagamentosDaDespesa = (params) => {
   const { numeroEmpenho } = params;
-  console.log("EMP - Valor pagamentos empenho ", numeroEmpenho);
+  "EMP - Valor pagamentos empenho ", numeroEmpenho;
   return new Promise(function (resolve, reject) {
     pool.query(
       `SELECT SUM("valorPagamento") FROM 
@@ -84,14 +83,13 @@ const createEmpenho = (body) => {
       observacao,
       numeroProtocolo,
     } = body;
-    console.log("Body emp ", body);
+    "Body emp ", body;
     pool.query(
       'INSERT INTO public.empenho("anoEmpenho", "dataEmpenho", "valorEmpenho", "observacao", "numeroProtocolo")' +
         " VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [anoEmpenho, dataEmpenho, valorEmpenho, observacao, numeroProtocolo],
       (error, results) => {
         if (error) {
-          // reject(error);
           console.log("Já existe um registro de empenho para essa despesa!");
           resolve("Já existe um registro de empenho para essa despesa!");
           return;
